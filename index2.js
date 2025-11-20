@@ -43,7 +43,7 @@ schedule.scheduleJob({ hour: 9, minute: 0, tz: 'Asia/Ho_Chi_Minh' }, () => {
 });
 
 // Lịch gửi chiều 6:00 PM
-schedule.scheduleJob({ hour: 18, minute: 0, tz: 'Asia/Ho_Chi_Minh' }, () => {
+schedule.scheduleJob({ hour: 18, minute: 30, tz: 'Asia/Ho_Chi_Minh' }, () => {
   sendScheduledMessage('evening');
 });
 
