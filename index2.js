@@ -9,6 +9,10 @@ const bot = new TelegramBot(process.env.TELEGRAM_TOKEN, { polling: true });
 const chatId = process.env.CHAT_ID;
 const ADMIN_ID = process.env.ADMIN_ID;
 
+// --- Tải kho tin nhắn tự động ---
+const autoPosts = JSON.parse(fs.readFileSync('autopost.json', 'utf8'));
+let autoIndex = 0;
+
 // --- Load messages ---
 const messages = JSON.parse(fs.readFileSync('messages.json', 'utf8'));
 let messageIndex = { morning: 0, evening: 0 };
@@ -21,6 +25,35 @@ const defaultReply = {
 
 // --- Trạng thái admin support ---
 let adminBusy = false;
+
+function sendAutoPost() {
+  const msg = autoPosts[autoIndex];
+
+  if (msg.photo) {
+    bot.sendPhoto(chatId, msg.photo, { caption: msg.text }).catch(console.error);
+  } else {
+    bot.sendMessage(chatId, msg.text).catch(console.error);
+  }
+
+  autoIndex = (autoIndex + 1) % autoPosts.length;
+
+  console.log("Sent auto post:", new Date());
+}
+
+// Chạy mỗi 2–3 tiếng ngẫu nhiên
+function scheduleRandomAutoPost() {
+  const nextHours = Math.floor(Math.random() * 0.5) + 0.5; // 2 hoặc 3 giờ
+  const nextTime = new Date(Date.now() + nextHours * 3600 * 1000);
+
+  schedule.scheduleJob(nextTime, () => {
+    sendAutoPost();
+    scheduleRandomAutoPost(); // đặt lịch tiếp theo
+  });
+
+  console.log(`Next auto post scheduled in ${nextHours}h`);
+}
+
+scheduleRandomAutoPost();
 
 // --- Gửi tin nhắn định kỳ ---
 function sendScheduledMessage(type) {
