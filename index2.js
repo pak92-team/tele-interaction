@@ -42,7 +42,7 @@ function sendAutoPost() {
 
 // Chạy mỗi 2–3 tiếng ngẫu nhiên
 function scheduleRandomAutoPost() {
-  const nextHours = Math.floor(Math.random() * 0.5) + 0.5; // 2 hoặc 3 giờ
+  const nextHours = Math.floor(Math.random() * 1) + 2; // 2 hoặc 3 giờ
   const nextTime = new Date(Date.now() + nextHours * 3600 * 1000);
 
   schedule.scheduleJob(nextTime, () => {
