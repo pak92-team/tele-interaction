@@ -4,6 +4,14 @@ const schedule = require("node-schedule");
 const axios = require("axios");
 const fs = require("fs");
 
+// check if server alive
+console.log(
+  "🚀 Xbot.js started — background worker is running. TZ:",
+  process.env.TZ || "server default"
+);
+setInterval(() => {
+  console.log("⏳ Still alive - worker running...");
+}, 5 * 60 * 1000); // mỗi 5 phút in 1 dòng để Render show log
 // Kết nối X API
 const client = new TwitterApi({
   appKey: process.env.X_API_KEY,
